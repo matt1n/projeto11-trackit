@@ -2,8 +2,17 @@ import styled from "styled-components";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import { softBlue, hardBlue, borderGray, grayText, selected, unselected } from "../../constants/Colors";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
 
 export default function HabitsPage() {
+    const {loginInfo} = useContext(AuthContext)
+
+
+    const days = ["D","S","T","Q","Q","S","S"]
+
+    console.log(loginInfo)
+
     return(
         <HabitsPageFormat>
             <NavBar/>

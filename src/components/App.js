@@ -6,19 +6,22 @@ import RegisterPage from "../pages/RegisterPage/RegisterPage.js";
 import HabitsPage from "../pages/HabitsPage/HabitsPage.js";
 import TodayPage from "../pages/TodayPage/TodayPage.js";
 import HistoricPage from "../pages/HistoricPage/HistoricPage.js";
+import AuthProvider from "../contexts/auth.js";
 
 export default function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
-      <Background/>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/cadastro" element={<RegisterPage />} />
-        <Route path="/habitos" element={<HabitsPage />} />
-        <Route path="/hoje" element={<TodayPage />} />
-        <Route path="/historico" element={<HistoricPage />} />
-      </Routes>
+      <Background />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/cadastro" element={<RegisterPage />} />
+          <Route path="/habitos" element={<HabitsPage />} />
+          <Route path="/hoje" element={<TodayPage />} />
+          <Route path="/historico" element={<HistoricPage />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

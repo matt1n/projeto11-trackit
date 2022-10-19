@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/imgs/Group 8.png";
@@ -10,27 +11,40 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false)
   const body = { email, name, image, password };
   const navigate = useNavigate()
 
-  function doSignUp(e) {
+  function signUpSucess(d){
+    setLoading(false)
+    console.log(d)
+    navigate('/')
+  }
+  function signUpError(d){
+    setLoading(false)
+    d.details ? console.log(d.details[0]) : console.log(d.message) 
+  }
+
+  function submitSignUp(e) {
     e.preventDefault();
+    setLoading(true)
     console.log(body);
     const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', body)
-    promise.then(()=>navigate('/'))
-    promise.catch(reply => alert(reply.response.data.details[0]));
+    promise.then((reply)=>signUpSucess(reply.data))
+    promise.catch(reply => signUpError(reply.response.data));
   }
 
   return (
     <RegisterPageFormat softBlue={softBlue} borderGray={borderGray}>
       <img src={logo} alt="Logo TrackIt"></img>
-      <form onSubmit={doSignUp}>
+      <form onSubmit={submitSignUp}>
         <input
           type="email"
           value={email}
           placeholder="email"
           onChange={(e) => setEmail(e.target.value)}
           required
+          disabled={loading}
         ></input>
         <input
           type="password"
@@ -38,6 +52,7 @@ export default function RegisterPage() {
           placeholder="senha"
           onChange={(e) => setPassword(e.target.value)}
           required
+          disabled={loading}
         ></input>
         <input
           type="text"
@@ -45,6 +60,7 @@ export default function RegisterPage() {
           placeholder="nome"
           onChange={(e) => setName(e.target.value)}
           required
+          disabled={loading}
         ></input>
         <input
           type="url"
@@ -52,8 +68,22 @@ export default function RegisterPage() {
           placeholder="foto"
           onChange={(e) => setImage(e.target.value)}
           required
+          disabled={loading}
         ></input>
-        <button type="submit">Cadastrar</button>
+        <button type="submit" disabled={loading}>{loading ? (
+            <ThreeDots
+              height="60"
+              width="60"
+              radius="9"
+              color="#ffffff"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              wrapperClassName=""
+              visible={true}
+            />
+          ) : (
+            "Cadastrar"
+          )}</button>
       </form>
       <StyledLink to="/" softBlue={softBlue}>
         Já tem uma conta? Faça login!
@@ -88,6 +118,9 @@ const RegisterPageFormat = styled.div`
         font-family: "Lexend Deca";
         font-size: 16px;
       }
+      &:disabled {
+        filter: opacity(0.7) brightness(0.7);
+      }
     }
     button {
       height: 45px;
@@ -98,6 +131,12 @@ const RegisterPageFormat = styled.div`
       font-family: "Lexend Deca";
       font-size: 16px;
       color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:disabled {
+        filter: opacity(0.8);
+      }
     }
   }
 `;

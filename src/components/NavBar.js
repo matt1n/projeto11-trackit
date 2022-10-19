@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { hardBlue } from "../constants/Colors"
+import { useContext } from "react"
+import { AuthContext } from "../contexts/auth"
 
 export default function NavBar() {
     const navigate = useNavigate()
+    const {loginInfo} = useContext(AuthContext)
     return(
         <NavBarFormat hardBlue={hardBlue}>
             <p onClick={()=>navigate("/")}>TrackIt</p>
-            <img src="https://www.imgacademy.com/sites/default/files/styles/scale_1700w/public/2022-07/img-homepage-meta_0.jpg?itok=LMirU0Ik" alt="asdasda"></img>
+            <img src={loginInfo.image} alt="Foto de perfil"></img>
         </NavBarFormat>
     )
 };
