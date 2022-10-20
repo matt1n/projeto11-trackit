@@ -2,16 +2,49 @@ import styled from "styled-components";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import { softBlue, hardBlue, borderGray, grayText, selected, unselected } from "../../constants/Colors";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/auth";
+import ButtonsCreateCard from "./ButtonsCreateCard";
+import axios from "axios";
 
 export default function HabitsPage() {
     const {loginInfo} = useContext(AuthContext)
+    const [createCard, setCreateCard] = useState(false)
+    const [cardTitle,setCardTitle] = useState("")
+    const [selectedDays, setSelectedDays] = useState([])
+    const body = {name: cardTitle, days: selectedDays}
+    const config = {
+        headers:{
+            "Authorization": `Bearer ${loginInfo.token}`
+        }
+    }
 
 
     const days = ["D","S","T","Q","Q","S","S"]
 
-    console.log(loginInfo)
+    useEffect(()=> {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+        promise.then(reply=> console.log(reply.data))
+        promise.catch(reply=> console.log(reply.response.data))
+    }, [])
+    
+    function saveHabitSucess(data){
+        console.log(data)
+        setSelectedDays([])
+        setCardTitle("")
+        setCreateCard(false)
+    }
+
+    function saveHabitError(data){
+        console.log(data)
+        alert(data.details[0])
+    }
+
+    function saveHabit(){
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config)
+        promise.then(reply=> saveHabitSucess(reply.data))
+        promise.catch(reply=> saveHabitError(reply.response.data))
+    }
 
     return(
         <HabitsPageFormat>
@@ -19,24 +52,24 @@ export default function HabitsPage() {
             <Footer/>
             <TitleHabits softBlue={softBlue} hardBlue={hardBlue}>
                 <h1>Meus hábitos</h1>
-                <button><p>+</p></button>
+                <button onClick={()=>setCreateCard(true)}><p>+</p></button>
             </TitleHabits>
-            <CreateCardHabits borderGray={borderGray} softBlue={softBlue} selected={selected} unselected={unselected}>
-                <input></input>
-                <ButtonUnselected unselected={unselected}>S</ButtonUnselected>
-                <ButtonSelected selected={selected}>T</ButtonSelected>
+            {createCard && <CreateCardHabits borderGray={borderGray} grayText={grayText} softBlue={softBlue} selected={selected} unselected={unselected}>
+                <input value={cardTitle} placeholder="Digite seu título" onChange={e=>setCardTitle(e.target.value)}></input>
+                {days.map((u,i)=><ButtonsCreateCard u={u} i={i} selectedDays={selectedDays} setSelectedDays={setSelectedDays}></ButtonsCreateCard>)}
+                {/* <ButtonSelected selected={selected}>T</ButtonSelected> */}
                 <div>
-                    <ButtonCancel softBlue={softBlue}>Cancelar</ButtonCancel>
-                    <ButtonSave softBlue={softBlue}>Salvar</ButtonSave>
+                    <ButtonCancel softBlue={softBlue} onClick={()=>setCreateCard(false)}>Cancelar</ButtonCancel>
+                    <ButtonSave softBlue={softBlue} onClick={()=>saveHabit()}>Salvar</ButtonSave>
                 </div>
-            </CreateCardHabits>
+            </CreateCardHabits>}
             <HabitsEmpty grayText={grayText}>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</HabitsEmpty>
-            <CardHabits grayText={grayText}>
+            {/* <CardHabits grayText={grayText}>
                 <p>título</p>
                 <ion-icon name="trash-outline"></ion-icon>
                 <ButtonUnselected unselected={unselected}>S</ButtonUnselected>
                 <ButtonSelected selected={selected}>T</ButtonSelected>
-            </CardHabits>
+            </CardHabits> */}
             
         </HabitsPageFormat>
     )
@@ -90,32 +123,17 @@ const CreateCardHabits = styled.div`
         height: 45px;
         border-radius: 5px;
         border: 1px solid ${props=>props.borderGray};
+        font-family: "Lexend Deca";
+        font-size: 20px;
+        color:${props=>props.grayText};
+        &::placeholder{
+            color: #DBDBDB;
+        }
     }
     div{
         display: flex;
         justify-content: flex-end;
     }
-`
-const ButtonUnselected = styled.button`
-        background-color: ${props=>props.unselected.backgroud};
-        width: 30px;
-        height: 30px;
-        border: 1px solid ${props=>props.unselected.border};
-        font-family: "Lexend Deca";
-        font-size: 20px;
-        color: ${props=>props.unselected.color};
-        border-radius: 5px;
-        margin-right: 4px;
-`
-const ButtonSelected = styled.button`
-        background-color: ${props=>props.selected.backgroud};
-        width: 30px;
-        height: 30px;
-        border: 1px solid ${props=>props.selected.border};
-        font-family: "Lexend Deca";
-        font-size: 20px;
-        color: ${props=>props.selected.color};
-        border-radius: 5px;
 `
 const ButtonCancel = styled.button`
             margin-top: 19px;
@@ -139,27 +157,27 @@ const ButtonSave = styled.button`
             font-size: 16px;
             color: #ffffff;
 `
-const CardHabits = styled.div`
-    width: 100%;
-    height: 91px;
-    padding: 13px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    margin-bottom: 29px;
-    position: relative;
-    p{
-        font-family: "Lexend Deca";
-        font-size: 20px;
-        color: ${props=>props.grayText};
-        margin-bottom: 10px;
-    }
-    ion-icon{
-        font-size: 20px;
-        position: absolute;
-        right: 10px;
-        top: 10px;
-    }
-`
+// const CardHabits = styled.div`
+//     width: 100%;
+//     height: 91px;
+//     padding: 13px;
+//     background-color: #ffffff;
+//     border-radius: 5px;
+//     margin-bottom: 29px;
+//     position: relative;
+//     p{
+//         font-family: "Lexend Deca";
+//         font-size: 20px;
+//         color: ${props=>props.grayText};
+//         margin-bottom: 10px;
+//     }
+//     ion-icon{
+//         font-size: 20px;
+//         position: absolute;
+//         right: 10px;
+//         top: 10px;
+//     }
+// `
 const HabitsEmpty = styled.p`
     font-family: "Lexend Deca";
     font-size: 18px;
