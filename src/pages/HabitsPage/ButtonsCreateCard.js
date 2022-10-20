@@ -22,7 +22,7 @@ export default function ButtonsCreateCard({u, i, selectedDays, setSelectedDays})
 };
 
 const ButtonUnselected = styled.button`
-        background-color: ${props=> props.buttonSelect ? props.selected.backgroud :props.unselected.backgroud};
+        background-color: ${props=> props.buttonSelect ? props.selected.background :props.unselected.background};
         width: 30px;
         height: 30px;
         border: 1px solid ${props=>props.buttonSelect ? props.selected.border :props.unselected.border};

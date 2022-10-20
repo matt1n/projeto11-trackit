@@ -19,9 +19,9 @@ export default function LoginPage() {
 
   function loginSucess(d) {
     // console.log(d);
+    setLoginInfo(d)
     setLoading(false);
     navigate("/habitos");
-    setLoginInfo(d)
   }
   function loginError(d) {
     setLoading(false);
