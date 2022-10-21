@@ -1,15 +1,29 @@
+import { useContext } from "react";
+import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { softBlue } from "../constants/Colors";
+import { AuthContext } from "../contexts/auth";
 
 export default function Footer() {
     const navigate = useNavigate()
+    const {percent} = useContext(AuthContext)
     return(
         <FooterFormat softBlue={softBlue}>
             <FooterRelative softBlue={softBlue}>
                 <HabitsButton onClick={()=>navigate("/habitos")}>Hábitos</HabitsButton>
                 <HistoricButton onClick={()=>navigate("/historico")}>Histórico</HistoricButton>
-                <div onClick={()=>navigate("/hoje")}>Hoje</div>
+                <Pruu onClick={()=>navigate("/hoje")}><Circless
+        value={percent}
+        background
+        backgroundPadding={6}
+        styles={buildStyles({
+          backgroundColor: `${softBlue}`,
+          textColor: "#fff",
+          pathColor: "#fff",
+          trailColor: "transparent"
+        })}
+      >Hoje</Circless></Pruu>
             </FooterRelative>
         </FooterFormat>
     )
@@ -39,25 +53,39 @@ const FooterRelative = styled.div`
         align-items: center;
         justify-content: center;
     }
-    div{
-        position: absolute;
-        width: 91px;
-        height: 91px;
-        border-radius: 91px;
-        background-color: aqua;
-        bottom: 10px;
-        left: 50%;
-        margin-left: -45.5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: ${props=> props.softBlue};
-        color: #ffffff;
-    }
 `
 const HabitsButton = styled.span`
+    font-family: "Lexend Deca";
+    font-size: 18px;
     margin-right: 45.5px;
 `
 const HistoricButton = styled.span`
     margin-left: 45.5px;
+    font-family: "Lexend Deca";
+    font-size: 18px;
+`
+const Pruu = styled.div`
+    position: fixed;
+    width: 91px;
+    height: 91px;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -45.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-family: "Lexend Deca";
+    font-size: 18px;
+    path{
+        transition: all 0.5s;
+    }
+`
+const Circless = styled(CircularProgressbarWithChildren)`
+    position: fixed;
+        width: 91px;
+        height: 91px;
+        bottom: 10px;
+        margin-left: -45.5px;
+        display: flex;
 `

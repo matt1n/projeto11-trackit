@@ -30,7 +30,7 @@ export default function HabitCards({u, days, card, showCards}) {
 
 const CardHabits = styled.div`
     width: 100%;
-    height: 91px;
+    min-height: 91px;
     padding: 13px;
     background-color: #ffffff;
     border-radius: 5px;

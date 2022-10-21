@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import LoginPage from "../pages/LoginPage/LoginPage.js";
 import GlobalStyle from "../assets/styles/GlobalStyle.js";
 import Background from "./Background.js";
