@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import logo from "../../assets/imgs/Group 8.png";
 import { borderGray, softBlue } from "../../constants/Colors";
 
@@ -17,18 +18,16 @@ export default function RegisterPage() {
 
   function signUpSucess(d){
     setLoading(false)
-    console.log(d)
     navigate('/')
   }
   function signUpError(d){
     setLoading(false)
-    d.details ? console.log(d.details[0]) : console.log(d.message) 
+    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message) 
   }
 
   function submitSignUp(e) {
     e.preventDefault();
     setLoading(true)
-    console.log(body);
     const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', body)
     promise.then((reply)=>signUpSucess(reply.data))
     promise.catch(reply => signUpError(reply.response.data));

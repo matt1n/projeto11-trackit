@@ -13,7 +13,6 @@ export default function ButtonsCreateCard({u, i, selectedDays, setSelectedDays})
             setSelectedDays(newArray)
         }
         setButtonSelect(!buttonSelect)
-        console.log(selectedDays)
     }
 
     return(

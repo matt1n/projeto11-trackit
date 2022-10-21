@@ -17,7 +17,6 @@ export default function TodayPage() {
         let socorro = data.filter((reply)=> reply.done)
         const plei = (socorro.length/data.length)
         socorro.length!==0 ? setPercent(plei*100) : setPercent(0)
-        console.log(`Você completou ${plei*100}% :3`)
     }
     
     function showTodaySucess(data){
@@ -31,11 +30,9 @@ export default function TodayPage() {
         promise.catch(reply=>console.log(reply.response.data))
     }
 
-    console.log(todayInfo)
-
     useEffect(()=> {
         showToday()
-    }, [])
+    },)
 
     return(
         <TodayPageFormat>

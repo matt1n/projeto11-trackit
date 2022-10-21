@@ -4,6 +4,7 @@ import ButtonsHabitCards from "./ButtonsHabitCards"
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/auth";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 export default function HabitCards({u, days, card, showCards}) {
     const {loginInfo} = useContext(AuthContext)
@@ -13,9 +14,27 @@ export default function HabitCards({u, days, card, showCards}) {
         },
       };
     function deleteCard(){
-        const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${card.id}`, config)
+        Swal.fire({
+            title: 'Você tem certeza?',
+            text: "É um caminho sem volta!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, tira da minha frente!',
+            cancelButtonText: 'Pera aí'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${card.id}`, config)
         promise.then(showCards())
         promise.catch(reply=>console.log(reply.response.data))
+              Swal.fire(
+                'Deletado!',
+                'Seu hábito foi excluído com sucesso',
+                'success'
+              )
+            }
+          })
     }
     return(
         <CardHabits grayText={grayText}>

@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import logo from "../../assets/imgs/Group 8.png";
 import { borderGray, softBlue } from "../../constants/Colors";
 
@@ -18,14 +19,13 @@ export default function LoginPage() {
   const body = { email, password };
 
   function loginSucess(d) {
-    // console.log(d);
     setLoginInfo(d)
     setLoading(false);
-    navigate("/habitos");
+    navigate("/hoje");
   }
   function loginError(d) {
     setLoading(false);
-    console.log(d);
+    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message) ;
   }
   function submitLogin(e) {
     e.preventDefault();

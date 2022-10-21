@@ -15,6 +15,7 @@ import ButtonsCreateCard from "./ButtonsCreateCard";
 import axios from "axios";
 import HabitCards from "./HabitCards";
 import { ThreeDots } from "react-loader-spinner";
+import Swal from "sweetalert2";
 
 export default function HabitsPage() {
   const { loginInfo } = useContext(AuthContext);
@@ -34,7 +35,7 @@ export default function HabitsPage() {
 
   useEffect(() => {
     showCards();
-  }, []);
+  });
 
   function showCards() {
     const promise = axios.get(
@@ -46,7 +47,6 @@ export default function HabitsPage() {
   }
 
   function saveHabitSucess(data) {
-    console.log(data);
     setSelectedDays([]);
     setCardTitle("");
     setCreateCard(false);
@@ -55,9 +55,8 @@ export default function HabitsPage() {
   }
 
   function saveHabitError(data) {
-    console.log(data);
     setLoading(false)
-    alert(data.details[0]);
+    data.details ? Swal.fire(data.details[0]) : Swal.fire(data.message) ;
   }
 
   function cancelHabit(){

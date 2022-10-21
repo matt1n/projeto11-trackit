@@ -14,7 +14,8 @@
     "react-router-dom": "^6.4.2",
     "react-scripts": "^4.0.3",
     "sort-by": "^1.2.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "sweetalert2": "^11.6.0"
   },
   "overrides": {
     "react-error-overlay": "6.0.9"
