@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Footer from "../../components/Footer";
 import NavBar from "../../components/NavBar";
 import {
-  softBlue,
+  softblue,
   hardBlue,
   borderGray,
   grayText,
@@ -18,18 +18,13 @@ import { ThreeDots } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
 export default function HabitsPage() {
-  const { loginInfo } = useContext(AuthContext);
+  const { config } = useContext(AuthContext);
   const [createCard, setCreateCard] = useState(false);
   const [cardTitle, setCardTitle] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);
   const [cards, setCards] = useState([]);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const body = { name: cardTitle, days: selectedDays };
-  const config = {
-    headers: {
-      Authorization: `Bearer ${loginInfo.token}`,
-    },
-  };
 
   const days = ["D", "S", "T", "Q", "Q", "S", "S"];
 
@@ -50,23 +45,23 @@ export default function HabitsPage() {
     setSelectedDays([]);
     setCardTitle("");
     setCreateCard(false);
-    setLoading(false)
+    setLoading(false);
     showCards();
   }
 
   function saveHabitError(data) {
-    setLoading(false)
-    data.details ? Swal.fire(data.details[0]) : Swal.fire(data.message) ;
+    setLoading(false);
+    data.details ? Swal.fire(data.details[0]) : Swal.fire(data.message);
   }
 
-  function cancelHabit(){
+  function cancelHabit() {
     setSelectedDays([]);
     setCardTitle("");
-    setCreateCard(false)
+    setCreateCard(false);
   }
 
   function saveHabit() {
-    setLoading(true)
+    setLoading(true);
     const promise = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
       body,
@@ -80,9 +75,9 @@ export default function HabitsPage() {
     <HabitsPageFormat>
       <NavBar />
       <Footer />
-      <TitleHabits softBlue={softBlue} hardBlue={hardBlue}>
+      <TitleHabits softblue={softblue} hardBlue={hardBlue}>
         <h1>Meus hábitos</h1>
-        <button onClick={() => setCreateCard(true)}>
+        <button data-identifier="create-habit-btn" onClick={() => setCreateCard(true)}>
           <p>+</p>
         </button>
       </TitleHabits>
@@ -90,11 +85,12 @@ export default function HabitsPage() {
         <CreateCardHabits
           borderGray={borderGray}
           grayText={grayText}
-          softBlue={softBlue}
+          softblue={softblue}
           selected={selected}
           unselected={unselected}
         >
           <input
+            data-identifier="input-habit-name"
             value={cardTitle}
             placeholder="Digite seu título"
             onChange={(e) => setCardTitle(e.target.value)}
@@ -110,34 +106,51 @@ export default function HabitsPage() {
           ))}
           <div>
             <ButtonCancel
-              softBlue={softBlue}
+              data-identifier="cancel-habit-create-btn"
+              softblue={softblue}
               disabled={loading}
               onClick={() => cancelHabit()}
             >
               Cancelar
             </ButtonCancel>
-            <ButtonSave softBlue={softBlue} disabled={loading} onClick={() => saveHabit()}>
-              {loading ? <ThreeDots
-              height="40"
-              width="40"
-              radius="9"
-              color="#ffffff"
-              ariaLabel="three-dots-loading"
-              wrapperStyle={{}}
-              wrapperClassName=""
-              visible={true}
-            /> : "Salvar"}
+            <ButtonSave
+              data-identifier="save-habit-create-btn"
+              softblue={softblue}
+              disabled={loading}
+              onClick={() => saveHabit()}
+            >
+              {loading ? (
+                <ThreeDots
+                  height="40"
+                  width="40"
+                  radius="9"
+                  color="#ffffff"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  wrapperClassName=""
+                  visible={true}
+                />
+              ) : (
+                "Salvar"
+              )}
             </ButtonSave>
           </div>
         </CreateCardHabits>
       )}
       {cards.length === 0 ? (
-        <HabitsEmpty grayText={grayText}>
+        <HabitsEmpty grayText={grayText} data-identifier="no-habit-message">
           Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
           começar a trackear!
         </HabitsEmpty>
       ) : (
-        cards.map((u, i) => <HabitCards u={u} days={days} card={cards[i]} showCards={showCards}></HabitCards>)
+        cards.map((u, i) => (
+          <HabitCards
+            u={u}
+            days={days}
+            card={cards[i]}
+            showCards={showCards}
+          ></HabitCards>
+        ))
       )}
     </HabitsPageFormat>
   );
@@ -164,7 +177,7 @@ const TitleHabits = styled.div`
   button {
     width: 40px;
     height: 35px;
-    background-color: ${(props) => props.softBlue};
+    background-color: ${(props) => props.softblue};
     border: none;
     border-radius: 5px;
     font-family: "Lexend Deca";
@@ -198,8 +211,8 @@ const CreateCardHabits = styled.div`
       color: #dbdbdb;
     }
     &:disabled {
-        filter: opacity(0.7) brightness(0.7);
-      }
+      filter: opacity(0.7) brightness(0.7);
+    }
   }
   div {
     display: flex;
@@ -215,14 +228,14 @@ const ButtonCancel = styled.button`
   border-radius: 5px;
   font-family: "Lexend Deca";
   font-size: 16px;
-  color: ${(props) => props.softBlue};
+  color: ${(props) => props.softblue};
   &:disabled {
     filter: opacity(0.8);
   }
 `;
 const ButtonSave = styled.button`
   margin-top: 19px;
-  background-color: ${(props) => props.softBlue};
+  background-color: ${(props) => props.softblue};
   width: 84px;
   height: 35px;
   border: none;

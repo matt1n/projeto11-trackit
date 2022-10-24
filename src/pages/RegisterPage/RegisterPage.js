@@ -5,39 +5,43 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import logo from "../../assets/imgs/Group 8.png";
-import { borderGray, softBlue } from "../../constants/Colors";
+import { borderGray, softblue } from "../../constants/Colors";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const body = { email, name, image, password };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  function signUpSucess(d){
-    setLoading(false)
-    navigate('/')
+  function signUpSucess(d) {
+    setLoading(false);
+    navigate("/");
   }
-  function signUpError(d){
-    setLoading(false)
-    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message) 
+  function signUpError(d) {
+    setLoading(false);
+    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message);
   }
 
   function submitSignUp(e) {
     e.preventDefault();
-    setLoading(true)
-    const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', body)
-    promise.then((reply)=>signUpSucess(reply.data))
-    promise.catch(reply => signUpError(reply.response.data));
+    setLoading(true);
+    const promise = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
+      body
+    );
+    promise.then((reply) => signUpSucess(reply.data));
+    promise.catch((reply) => signUpError(reply.response.data));
   }
 
   return (
-    <RegisterPageFormat softBlue={softBlue} borderGray={borderGray}>
+    <RegisterPageFormat softblue={softblue} borderGray={borderGray}>
       <img src={logo} alt="Logo TrackIt"></img>
       <form onSubmit={submitSignUp}>
         <input
+          data-identifier="input-email"
           type="email"
           value={email}
           placeholder="email"
@@ -46,6 +50,7 @@ export default function RegisterPage() {
           disabled={loading}
         ></input>
         <input
+          data-identifier="input-password"
           type="password"
           value={password}
           placeholder="senha"
@@ -54,6 +59,7 @@ export default function RegisterPage() {
           disabled={loading}
         ></input>
         <input
+          data-identifier="input-name"
           type="text"
           value={name}
           placeholder="nome"
@@ -62,6 +68,7 @@ export default function RegisterPage() {
           disabled={loading}
         ></input>
         <input
+          data-identifier="input-photo"
           type="url"
           value={image}
           placeholder="foto"
@@ -69,7 +76,8 @@ export default function RegisterPage() {
           required
           disabled={loading}
         ></input>
-        <button type="submit" disabled={loading}>{loading ? (
+        <button type="submit" disabled={loading} data-identifier="back-to-login-action">
+          {loading ? (
             <ThreeDots
               height="60"
               width="60"
@@ -82,9 +90,10 @@ export default function RegisterPage() {
             />
           ) : (
             "Cadastrar"
-          )}</button>
+          )}
+        </button>
       </form>
-      <StyledLink to="/" softBlue={softBlue}>
+      <StyledLink to="/" softblue={softblue}>
         Já tem uma conta? Faça login!
       </StyledLink>
     </RegisterPageFormat>
@@ -124,7 +133,7 @@ const RegisterPageFormat = styled.div`
     button {
       height: 45px;
       margin-bottom: 26.5px;
-      background-color: ${(props) => props.softBlue};
+      background-color: ${(props) => props.softblue};
       border: none;
       border-radius: 5px;
       font-family: "Lexend Deca";
@@ -140,5 +149,5 @@ const RegisterPageFormat = styled.div`
   }
 `;
 const StyledLink = styled(Link)`
-  color: ${(props) => props.softBlue};
+  color: ${(props) => props.softblue};
 `;

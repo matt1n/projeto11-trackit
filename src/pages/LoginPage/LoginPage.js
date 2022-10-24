@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import logo from "../../assets/imgs/Group 8.png";
-import { borderGray, softBlue } from "../../constants/Colors";
+import { borderGray, softblue } from "../../constants/Colors";
 
 import { AuthContext } from "../../contexts/auth";
 
@@ -14,18 +14,18 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const {setLoginInfo} = useContext(AuthContext)
+  const { setLoginInfo } = useContext(AuthContext);
 
   const body = { email, password };
 
   function loginSucess(d) {
-    setLoginInfo(d)
+    setLoginInfo(d);
     setLoading(false);
     navigate("/hoje");
   }
   function loginError(d) {
     setLoading(false);
-    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message) ;
+    d.details ? Swal.fire(d.details[0]) : Swal.fire(d.message);
   }
   function submitLogin(e) {
     e.preventDefault();
@@ -41,11 +41,12 @@ export default function LoginPage() {
     <LoginPageFormat
       onSubmit={submitLogin}
       borderGray={borderGray}
-      softBlue={softBlue}
+      softblue={softblue}
     >
       <img src={logo} alt="Logo TrackIt"></img>
       <form>
         <input
+          data-identifier="input-email"
           value={email}
           type="email"
           placeholder="email"
@@ -54,6 +55,7 @@ export default function LoginPage() {
           disabled={loading}
         ></input>
         <input
+          data-identifier="input-password"
           value={password}
           type="password"
           placeholder="password"
@@ -61,7 +63,7 @@ export default function LoginPage() {
           required
           disabled={loading}
         ></input>
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} data-identifier="login-btn">
           {loading ? (
             <ThreeDots
               height="60"
@@ -78,7 +80,7 @@ export default function LoginPage() {
           )}
         </button>
       </form>
-      <StyledLinkLogin to="/cadastro" softBlue={softBlue}>
+      <StyledLinkLogin to="/cadastro" softblue={softblue} data-identifier="sign-up-action">
         Não tem uma conta? Cadastre-se!
       </StyledLinkLogin>
     </LoginPageFormat>
@@ -118,7 +120,7 @@ const LoginPageFormat = styled.div`
     button {
       height: 45px;
       margin-bottom: 26.5px;
-      background-color: ${(props) => props.softBlue};
+      background-color: ${(props) => props.softblue};
       border: none;
       border-radius: 5px;
       font-family: "Lexend Deca";
@@ -134,5 +136,5 @@ const LoginPageFormat = styled.div`
   }
 `;
 const StyledLinkLogin = styled(Link)`
-  color: ${(props) => props.softBlue};
+  color: ${(props) => props.softblue};
 `;
